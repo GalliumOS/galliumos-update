@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=GalliumOS Update Notifier
+Icon=software-update-available
+Exec=/usr/bin/galliumos-update-notifier --delay
+Terminal=false
+Type=Application
+Categories=

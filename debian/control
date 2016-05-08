@@ -1,0 +1,13 @@
+Source: galliumos-update
+Section: admin
+Priority: required
+Maintainer: reynhout <reynhout@galliumos.org>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.6
+
+Package: galliumos-update
+Architecture: all
+Priority: required
+Depends: galliumos-base
+Description: GalliumOS Update Scripts
+ System updater scripts for GalliumOS

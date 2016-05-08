@@ -1,0 +1,5 @@
+galliumos-update (2.0) xenon; urgency=medium
+
+  * Initial version, for GalliumOS 2.0
+
+ -- reynhout <reynhout@galliumos.org>  Sun, 08 May 2016 02:15:55 +0000

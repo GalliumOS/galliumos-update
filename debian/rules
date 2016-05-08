@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+%:
+	dh $@
+
+override_dh_build:
+	dh_build
+	$(MAKE) -C src
+
+override_dh_clean:
+	dh_clean
+	$(MAKE) -C src clean
+
+override_dh_install:
+	dh_install
+	$(MAKE) -C src install DESTDIR=$(CURDIR)/debian/galliumos-update
+
+override_dh_fixperms:
+	dh_fixperms -Xupdate_package_index
+
