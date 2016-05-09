@@ -9,5 +9,5 @@ Package: galliumos-update
 Architecture: all
 Priority: required
 Depends: galliumos-base
-Description: GalliumOS Update Scripts
- System updater scripts for GalliumOS
+Description: GalliumOS System Update
+ GalliumOS System Update scripts

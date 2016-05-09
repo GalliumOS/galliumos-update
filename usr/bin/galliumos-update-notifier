@@ -4,7 +4,7 @@
 #
 
 [ "$(groups | grep -w sudo)" ] || exit 0
-[ "$1" = '--delay' ] && sleep 20 
+[ "$1" = '--delay' ] && sleep 10
 
 UPD_COUNT=0
 SEC_COUNT=0
