@@ -1,0 +1,64 @@
+#!/bin/sh
+#
+# galliumos-update-notifier
+#
+
+[ "$(groups | grep -w sudo)" ] || exit 0
+[ "$1" = '--delay' ] && sleep 10
+
+UPD_COUNT=0
+SEC_COUNT=0
+
+## Use the system APT cache. Building our own would be preferable
+## for many reasons (no locking issues, no 4755 binary), but also
+## waste scarce disk space (244MB as of 20160612).
+/usr/lib/galliumos-update/update_package_index
+
+## Use a non-system APT cache.
+#APTDIR="/tmp/apt"
+#mkdir -p "$APTDIR/state/lists/partial"
+#mkdir -p "$APTDIR/cache/archives/partial"
+#touch "$APTDIR/state/status"
+#
+#APT_OPTS="-o Debug::NoLocking=true \
+#  -o Dir::State=$APTDIR/state \
+#  -o Dir::Cache=$APTDIR/cache \
+#  -o Acquire::Retries=3"
+#
+#apt-get $APT_OPTS update
+##
+
+PKG_LIST="$(apt-get -qqs dist-upgrade | grep ^Inst)"
+#PKG_LIST="$(echo -e "pkg1\npkg2\npkg3 security\npkg4 security\npkg5\n")"
+
+IFS="
+"
+
+for pkg in $PKG_LIST; do
+  UPD_COUNT=$(( UPD_COUNT + 1 ))
+  [ "$(echo $pkg | grep -i security)" ] && SEC_COUNT=$(( SEC_COUNT + 1 ))
+done
+#echo "upd:$UPD_COUNT  sec:$SEC_COUNT"
+
+[ "$UPD_COUNT" -eq 0 ] && exit 0
+
+SUMMARY='Software Updates Available'
+
+UPD_INFO="$UPD_COUNT package update"
+[ "$UPD_COUNT" -ne 1 ] && UPD_INFO="${UPD_INFO}s"
+
+SEC_INFO="$SEC_COUNT is a security update"
+[ "$SEC_COUNT" -ne 1 ] && SEC_INFO="${SEC_COUNT} are security updates"
+
+BODY=$UPD_INFO
+ICON='software-update-available'
+URGENCY='normal'
+
+if [ "$SEC_COUNT" -gt 0 ]; then
+  BODY="$BODY\n$SEC_INFO"
+  ICON='software-update-urgent'
+  URGENCY='critical'
+fi
+
+notify-send -t 10000 -u "$URGENCY" -i "$ICON" "$SUMMARY" "$BODY"
+

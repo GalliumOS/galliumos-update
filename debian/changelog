@@ -1,0 +1,11 @@
+galliumos-update (2.0.1) xenon; urgency=medium
+
+  * Improve messaging, add notes for non-system APT cache
+
+ -- reynhout <reynhout@galliumos.org>  Sat, 18 Jun 2016 02:06:21 +0000
+
+galliumos-update (2.0) xenon; urgency=medium
+
+  * Initial version, for GalliumOS 2.0
+
+ -- reynhout <reynhout@galliumos.org>  Sun, 08 May 2016 02:15:55 +0000
