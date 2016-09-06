@@ -1,0 +1,8 @@
+src/about.c
+src/main.c
+src/notification.c
+src/scale.c
+src/tree.c
+src/util.c
+src/zenity.glade
+src/option.c

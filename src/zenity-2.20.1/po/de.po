@@ -1,0 +1,611 @@
+# German Zenity translation.
+# Copyright (C) 2003, 2004 Sun Microsystems, Inc. 
+# This file is distributed under the same license as the zenity package.
+# Christian Neumair <chris@gnome-de.org>, 2003, 2004.
+# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: zenity 2.5.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-15 12:30+0200\n"
+"PO-Revision-Date: 2007-08-15 12:31+0200\n"
+"Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
+"Language-Team: German <gnome-de@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/about.c:65
+msgid ""
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version.\n"
+msgstr ""
+"Dieses Programm ist freie Software. Sie können es unter den Bedingungen der "
+"GNU General Public License, wie von der Free Software Foundation "
+"veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 2 "
+"der Lizenz oder (nach Ihrer Option) jeder späteren Version.\n"
+
+#: ../src/about.c:69
+msgid ""
+"This program is distributed in the hope that it will be useful, but WITHOUT "
+"ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or "
+"FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details.\n"
+msgstr ""
+"Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen "
+"von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die "
+"implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN "
+"BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License.\n"
+
+#: ../src/about.c:73
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"this program; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+msgstr ""
+"Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem "
+"Programm erhalten haben. Falls nicht, schreiben Sie an die Free Software "
+"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA."
+
+#: ../src/about.c:264
+msgid "translator-credits"
+msgstr ""
+"Christian Neumair <chris@gnome-de.org>\n"
+"Hendrik Richter <hendrikr@gnome.org>"
+
+#: ../src/about.c:276
+msgid "Display dialog boxes from shell scripts"
+msgstr "Dialogfenster aus Shell-Skripten heraus aufrufen"
+
+#: ../src/main.c:94
+msgid "You must specify a dialog type. See 'zenity --help' for details\n"
+msgstr ""
+"Sie müssen einen Dialogtypen angeben. Siehe »zenity --help« für weitere "
+"Details.\n"
+
+#: ../src/notification.c:139
+msgid "could not parse command from stdin\n"
+msgstr "Befehl von Standardeingabe konnte nicht interpretiert werden\n"
+
+#: ../src/notification.c:252 ../src/notification.c:269
+msgid "Zenity notification"
+msgstr "Zenity-Benachrichtigung"
+
+#: ../src/scale.c:56
+msgid "Maximum value must be greater than minimum value.\n"
+msgstr "Der maximale Wert muss größer als der minimale sein.\n"
+
+#: ../src/scale.c:63
+msgid "Value out of range.\n"
+msgstr "Wert außerhalb des gültigen Bereichs.\n"
+
+#: ../src/tree.c:320
+msgid "No column titles specified for List dialog.\n"
+msgstr "Keine Spaltentitel für Listendialog angegeben\n"
+
+#: ../src/tree.c:326
+msgid "You should use only one List dialog type.\n"
+msgstr "Sie sollen nur Listendialogtypen verwenden.\n"
+
+#: ../src/zenity.glade.h:1
+msgid "Add a new entry"
+msgstr "Einen neuen Eintrag hinzufügen"
+
+#: ../src/zenity.glade.h:2
+msgid "Adjust the scale value"
+msgstr "Wert des Schiebereglers anpassen"
+
+#: ../src/zenity.glade.h:3
+msgid "All updates are complete."
+msgstr "Alle Aktualisierungen wurden fertiggestellt."
+
+#: ../src/zenity.glade.h:4
+msgid "An error has occurred."
+msgstr "Ein Fehler ist aufgetreten."
+
+#: ../src/zenity.glade.h:5
+msgid "Are you sure you want to proceed?"
+msgstr "Wollen Sie fortfahren?"
+
+#: ../src/zenity.glade.h:6
+msgid "C_alendar:"
+msgstr "_Kalender:"
+
+#: ../src/zenity.glade.h:7
+msgid "Calendar selection"
+msgstr "Wählen Sie ein Datum"
+
+#: ../src/zenity.glade.h:8
+msgid "Error"
+msgstr "Fehler"
+
+#: ../src/zenity.glade.h:9
+msgid "Information"
+msgstr "Informationen"
+
+#: ../src/zenity.glade.h:10
+msgid "Progress"
+msgstr "Fortschritt"
+
+#: ../src/zenity.glade.h:11
+msgid "Question"
+msgstr "Frage"
+
+#: ../src/zenity.glade.h:12
+msgid "Running..."
+msgstr "Läuft …"
+
+#: ../src/zenity.glade.h:13
+msgid "Select a date from below."
+msgstr "Wählen Sie ein Datum."
+
+#: ../src/zenity.glade.h:14
+msgid "Select a file"
+msgstr "Wählen Sie eine Datei"
+
+#: ../src/zenity.glade.h:15
+msgid "Select items from the list"
+msgstr "Wählen Sie Objekte aus der Liste"
+
+#: ../src/zenity.glade.h:16
+msgid "Select items from the list below."
+msgstr "Wählen Sie Objekte aus der Liste."
+
+#: ../src/zenity.glade.h:17
+msgid "Text View"
+msgstr "Textansicht"
+
+#: ../src/zenity.glade.h:18
+msgid "Warning"
+msgstr "Warnung"
+
+#: ../src/zenity.glade.h:19
+msgid "_Enter new text:"
+msgstr "_Geben Sie den neuen Text ein:"
+
+#: ../src/option.c:117
+msgid "Set the dialog title"
+msgstr "Den Dialogtitel festlegen"
+
+#: ../src/option.c:118
+msgid "TITLE"
+msgstr "TITEL"
+
+#: ../src/option.c:126
+msgid "Set the window icon"
+msgstr "Das Fenstersymbol festlegen"
+
+#: ../src/option.c:127
+msgid "ICONPATH"
+msgstr "SYMBOLPFAD"
+
+#: ../src/option.c:135
+msgid "Set the width"
+msgstr "Die Breite festlegen"
+
+#: ../src/option.c:136
+msgid "WIDTH"
+msgstr "BREITE"
+
+#: ../src/option.c:144
+msgid "Set the height"
+msgstr "Die Höhe festlegen"
+
+#: ../src/option.c:145
+msgid "HEIGHT"
+msgstr "HÖHE"
+
+#: ../src/option.c:153
+msgid "Set dialog timeout in seconds"
+msgstr "Den Timeout des Dialogs in Sekunden festlegen"
+
+#: ../src/option.c:168
+msgid "Display calendar dialog"
+msgstr "Kalenderdialog anzeigen"
+
+#: ../src/option.c:177 ../src/option.c:237 ../src/option.c:280
+#: ../src/option.c:313 ../src/option.c:415 ../src/option.c:544
+#: ../src/option.c:606 ../src/option.c:672 ../src/option.c:705
+msgid "Set the dialog text"
+msgstr "Den Dialogtext festlegen"
+
+#: ../src/option.c:178 ../src/option.c:238 ../src/option.c:247
+#: ../src/option.c:256 ../src/option.c:281 ../src/option.c:314
+#: ../src/option.c:416 ../src/option.c:512 ../src/option.c:545
+#: ../src/option.c:607 ../src/option.c:673 ../src/option.c:706
+msgid "TEXT"
+msgstr "TEXT"
+
+#: ../src/option.c:186
+msgid "Set the calendar day"
+msgstr "Den Kalendertag festlegen"
+
+#: ../src/option.c:187
+msgid "DAY"
+msgstr "TAG"
+
+#: ../src/option.c:195
+msgid "Set the calendar month"
+msgstr "Den Kalendermonat festlegen"
+
+#: ../src/option.c:196
+msgid "MONTH"
+msgstr "MONAT"
+
+#: ../src/option.c:204
+msgid "Set the calendar year"
+msgstr "Das Kalenderjahr festlegen"
+
+#: ../src/option.c:205
+msgid "YEAR"
+msgstr "JAHR"
+
+#: ../src/option.c:213
+msgid "Set the format for the returned date"
+msgstr "Das Format für das zurückgegebene Datum festlegen"
+
+#: ../src/option.c:214
+msgid "PATTERN"
+msgstr "MUSTER"
+
+#: ../src/option.c:228
+msgid "Display text entry dialog"
+msgstr "Texteingabe-Dialog anzeigen"
+
+#: ../src/option.c:246
+msgid "Set the entry text"
+msgstr "Den Eingabetext festlegen"
+
+#: ../src/option.c:255
+msgid "Hide the entry text"
+msgstr "Den Eingabetext verbergen"
+
+#: ../src/option.c:271
+msgid "Display error dialog"
+msgstr "Fehlerdialog anzeigen"
+
+#: ../src/option.c:289 ../src/option.c:322 ../src/option.c:615
+#: ../src/option.c:681
+msgid "Do not enable text wrapping"
+msgstr "Zeilenumbrüche nicht aktivieren"
+
+#: ../src/option.c:304
+msgid "Display info dialog"
+msgstr "Info-Dialog anzeigen"
+
+#: ../src/option.c:337
+msgid "Display file selection dialog"
+msgstr "Dateiwähler-Dialog anzeigen"
+
+#: ../src/option.c:346
+msgid "Set the filename"
+msgstr "Den Dateinamen festlegen"
+
+#: ../src/option.c:347 ../src/option.c:640
+msgid "FILENAME"
+msgstr "DATEINAME"
+
+#: ../src/option.c:355
+msgid "Allow multiple files to be selected"
+msgstr "Auswahl mehrerer Dateien zulassen"
+
+# CHECK
+#: ../src/option.c:364
+msgid "Activate directory-only selection"
+msgstr "Nur Verzeichnisse auswählen"
+
+#: ../src/option.c:373
+msgid "Activate save mode"
+msgstr "Speichermodus aktivieren"
+
+#: ../src/option.c:382 ../src/option.c:451
+msgid "Set output separator character"
+msgstr "Das Trennzeichen für die Ausgabe festlegen"
+
+#: ../src/option.c:383 ../src/option.c:452
+msgid "SEPARATOR"
+msgstr "TRENNZEICHEN"
+
+#: ../src/option.c:391
+msgid "Confirm file selection if filename already exists"
+msgstr "Dateiauswahl bestätigen, falls ein Dateiname bereits existiert"
+
+#: ../src/option.c:406
+msgid "Display list dialog"
+msgstr "Listendialog anzeigen"
+
+#: ../src/option.c:424
+msgid "Set the column header"
+msgstr "Den Spaltentitel festlegen"
+
+#: ../src/option.c:425
+msgid "COLUMN"
+msgstr "SPALTE"
+
+#: ../src/option.c:433
+msgid "Use check boxes for first column"
+msgstr "Kontrollkästchen für die erste Spalte verwenden"
+
+#: ../src/option.c:442
+msgid "Use radio buttons for first column"
+msgstr "Radioknöpfe für die erste Spalte verwenden"
+
+#: ../src/option.c:460
+msgid "Allow multiple rows to be selected"
+msgstr "Auswahl mehrerer Reihen zulassen"
+
+#: ../src/option.c:469 ../src/option.c:648
+msgid "Allow changes to text"
+msgstr "Änderungen am Text zulassen"
+
+#: ../src/option.c:478
+msgid ""
+"Print a specific column (Default is 1. 'ALL' can be used to print all "
+"columns)"
+msgstr ""
+"Drucke eine bestimmte Spalte (Standard ist 1. »ALL« kann benutzt werden, um "
+"alle Spalten zu drucken)"
+
+#: ../src/option.c:479 ../src/option.c:488
+msgid "NUMBER"
+msgstr "NUMMER"
+
+#: ../src/option.c:487
+msgid "Hide a specific column"
+msgstr "Eine bestimmte Spalte verbergen."
+
+#: ../src/option.c:502
+msgid "Display notification"
+msgstr "Benachrichtigung anzeigen"
+
+#: ../src/option.c:511
+msgid "Set the notification text"
+msgstr "Den Benachrichtigungstext festlegen"
+
+#: ../src/option.c:520
+msgid "Listen for commands on stdin"
+msgstr "Auf der Standardeingabe nach Befehlen horchen"
+
+#: ../src/option.c:535
+msgid "Display progress indication dialog"
+msgstr "Fortschrittsanzeige-Dialog anzeigen"
+
+#: ../src/option.c:553
+msgid "Set initial percentage"
+msgstr "Den anfänglichen Prozentsatz festlegen"
+
+#: ../src/option.c:554
+msgid "PERCENTAGE"
+msgstr "PROZENT"
+
+#: ../src/option.c:562
+msgid "Pulsate progress bar"
+msgstr "Pulsierende Fortschrittsleiste"
+
+#: ../src/option.c:572
+#, no-c-format
+msgid "Dismiss the dialog when 100% has been reached"
+msgstr "Den Dialog beenden, wenn 100% erreicht sind"
+
+#: ../src/option.c:582
+#, no-c-format
+msgid "Kill parent process if cancel button is pressed"
+msgstr "Elternprozess beenden, wenn der Abbrechen-Knopf gedrückt wird"
+
+#: ../src/option.c:597
+msgid "Display question dialog"
+msgstr "Fragedialog anzeigen"
+
+#: ../src/option.c:630
+msgid "Display text information dialog"
+msgstr "Text-Informationsdialog anzeigen"
+
+#: ../src/option.c:639
+msgid "Open file"
+msgstr "Datei öffnen"
+
+#: ../src/option.c:663
+msgid "Display warning dialog"
+msgstr "Warndialog anzeigen"
+
+#: ../src/option.c:696
+msgid "Display scale dialog"
+msgstr "Schieberegler-Dialog anzeigen"
+
+#: ../src/option.c:714
+msgid "Set initial value"
+msgstr "Den anfänglichen Wert festlegen"
+
+#: ../src/option.c:715 ../src/option.c:724 ../src/option.c:733
+#: ../src/option.c:742
+msgid "VALUE"
+msgstr "WERT"
+
+#: ../src/option.c:723
+msgid "Set minimum value"
+msgstr "Den minimalen Wert festlegen"
+
+#: ../src/option.c:732
+msgid "Set maximum value"
+msgstr "Den maximalen Wert festlegen"
+
+#: ../src/option.c:741
+msgid "Set step size"
+msgstr "Die Schrittgröße festlegen"
+
+#: ../src/option.c:750
+msgid "Print partial values"
+msgstr "Zwischenwerte anzeigen"
+
+#: ../src/option.c:759
+msgid "Hide value"
+msgstr "Den Wert ausblenden"
+
+#: ../src/option.c:774
+msgid "About zenity"
+msgstr "Info zu zenity"
+
+#: ../src/option.c:783
+msgid "Print version"
+msgstr "Druckversion"
+
+#: ../src/option.c:1425
+msgid "General options"
+msgstr "Allgemeine Einstellungen"
+
+#: ../src/option.c:1426
+msgid "Show general options"
+msgstr "Allgemeine Einstellungen anzeigen"
+
+#: ../src/option.c:1436
+msgid "Calendar options"
+msgstr "Kalendereinstellungen"
+
+#: ../src/option.c:1437
+msgid "Show calendar options"
+msgstr "Kalendereinstellungen anzeigen"
+
+#: ../src/option.c:1447
+msgid "Text entry options"
+msgstr "Einstellungen der Texteingabe"
+
+#: ../src/option.c:1448
+msgid "Show text entry options"
+msgstr "Einstellungen der Texteingabe anzeigen"
+
+#: ../src/option.c:1458
+msgid "Error options"
+msgstr "Fehlereinstellungen"
+
+#: ../src/option.c:1459
+msgid "Show error options"
+msgstr "Fehlereinstellungen"
+
+#: ../src/option.c:1469
+msgid "Info options"
+msgstr "Info-Einstellungen"
+
+#: ../src/option.c:1470
+msgid "Show info options"
+msgstr "Info-Einstellungen anzeigen"
+
+#: ../src/option.c:1480
+msgid "File selection options"
+msgstr "Einstellungen des Dateiwählers"
+
+#: ../src/option.c:1481
+msgid "Show file selection options"
+msgstr "Einstellungen des Dateiwählers anzeigen"
+
+#: ../src/option.c:1491
+msgid "List options"
+msgstr "Listeneinstellungen"
+
+#: ../src/option.c:1492
+msgid "Show list options"
+msgstr "Listeneinstellungen anzeigen"
+
+#: ../src/option.c:1502
+msgid "Notification icon options"
+msgstr "Benachrichtigungssymbol-Einstellungen"
+
+#: ../src/option.c:1503
+msgid "Show notification icon options"
+msgstr "Benachrichtigungssymbol-Einstellungen anzeigen"
+
+#: ../src/option.c:1513
+msgid "Progress options"
+msgstr "Fortschrittseinstellungen"
+
+#: ../src/option.c:1514
+msgid "Show progress options"
+msgstr "Fortschrittseinstellungen anzeigen"
+
+#: ../src/option.c:1524
+msgid "Question options"
+msgstr "Frageeinstellungen"
+
+#: ../src/option.c:1525
+msgid "Show question options"
+msgstr "Frageeinstellungen anzeigen"
+
+#: ../src/option.c:1535
+msgid "Warning options"
+msgstr "Warneinstellungen"
+
+#: ../src/option.c:1536
+msgid "Show warning options"
+msgstr "Warneinstellungen anzeigen"
+
+#: ../src/option.c:1546
+msgid "Scale options"
+msgstr "Schiebereglereinstellungen"
+
+#: ../src/option.c:1547
+msgid "Show scale options"
+msgstr "Schiebereglereinstellungen anzeigen"
+
+#: ../src/option.c:1557
+msgid "Text information options"
+msgstr "Textinformationseinstellungen"
+
+#: ../src/option.c:1558
+msgid "Show text information options"
+msgstr "Textinformationseinstellungen anzeigen"
+
+#: ../src/option.c:1568
+msgid "Miscellaneous options"
+msgstr "Verschiedene Einstellungen"
+
+#: ../src/option.c:1569
+msgid "Show miscellaneous options"
+msgstr "Verschiedene Einstellungen anzeigen"
+
+#: ../src/option.c:1594
+msgid ""
+"This option is not available. Please see --help for all possible usages.\n"
+msgstr ""
+"Diese Option steht nicht zur Verfügung. Bitte verwenden Sie »--help« für "
+"alle Anwendungsmöglichkeiten.\n"
+
+#: ../src/option.c:1598
+#, c-format
+msgid "--%s is not supported for this dialog\n"
+msgstr "--%s wird von diesem Dialog nicht unterstützt\n"
+
+#: ../src/option.c:1602
+msgid "Two or more dialog options specified\n"
+msgstr "Dialog-Option mehrfach übergeben\n"
+
+#~ msgid "Orientation"
+#~ msgstr "Ausrichtung"
+
+#~ msgid "The orientation of the tray."
+#~ msgstr "Die Ausrichtung der Anzeige."
+
+#~ msgid "Adjust the scale value."
+#~ msgstr "Den Wert des Schiebereglers anpassen."
+
+#~ msgid "(C) 2003 Sun Microsystems"
+#~ msgstr "Copyright (C) 2003 Sun Microsystems"
+
+#~ msgid "Credits"
+#~ msgstr "Mitwirkende"
+
+#~ msgid "Written by"
+#~ msgstr "Programm von"
+
+#~ msgid "Translated by"
+#~ msgstr "Übersetzung von"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "About Zenity"
+#~ msgstr "Info zu Zenity"
+
+#~ msgid "_Credits"
+#~ msgstr "_Mitwirkende"
