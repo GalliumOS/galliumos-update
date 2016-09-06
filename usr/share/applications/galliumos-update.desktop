@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=GalliumOS Update
-Exec=/usr/bin/galliumos-update --popup
+Exec=/usr/bin/galliumos-update --gui
 Icon=/usr/share/icons/gnome/256x256/status/software-update-available.png
 Categories=System

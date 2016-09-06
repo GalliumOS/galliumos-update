@@ -1,24 +1,52 @@
 #!/bin/sh
+
 #
 # galliumos-update
+# Created by the galliumos devs
+# Gui version by David Smerkous
+#
+# License: GPL(V3)
+# Date: 9/5/2016
 #
 
 VERSION="v1: \"pardon our text\""
+UPDATE_ICON="/usr/share/icons/gnome/256x256/status/software-update-available.png" 
+SPLASH_HTML="/usr/share/gallium/splash.html"
 
 relaunch_in_popup() {
   xfce4-terminal \
     --title="GalliumOS Update" --geometry=120x24+100+0 \
-    --icon=/usr/share/icons/gnome/256x256/status/software-update-available.png \
+    --icon=$UPDATE_ICON \
     --execute $0 --banner --hold
+  exit 0
+}
+
+relaunch_in_gui() {
+   if [[ $EUID -ne 0 ]]; then
+      echo "Debug Root detected"
+   else
+    echo "$(gksudo --print-pass --sudo-mode --message "Enter password for update" \
+       "$(0)")" | sudo -S printf '' # Open up password prompt and renter as root
+  fi
+  FIRST_T=$(echo "$0" | cut -c 1-2) # Get first two characters
+  NAME="$0"
+  if [ "$FIRST_T" = "./" ]; then
+     NAME=$(echo "$0" | cut -d "/" -f 2) # Fix locally ran
+  fi 
+  CUR_PATH=$(readlink -f "$NAME")
+  sudo $CUR_PATH --gui_format --hold
   exit 0
 }
 
 while [ "$1" ]; do
   case "$1" in
     '--popup')  relaunch_in_popup ;;
+    '--gui') relaunch_in_gui ;;
+    '--gui_format') GUIMODE=1 ;;
     '--banner') BANNER=1 ;;
     '--hold')   HOLD=1 ;;
-    *)          echo "$0: fatal: unknown arg \"$1\""; exit 1 ;;
+    *)          printf "$0: fatal: unknown arg \"$1\"\nAvaliable: --popup, --gui, --banner, --hold\n";
+                exit 1 ;;
   esac
   shift
 done
@@ -41,6 +69,21 @@ EOBANNER
   /bin/echo -e "   ${ANSI_RST}${ANSI_WHT}${VERSION}${ANSI_RST}"
 }
 
+gui_banner() {
+  zenity --text-info --title="GalliumOS Update" --width=500 --height=350  --html \
+  --filename="$SPLASH_HTML" --ok-label="Update"
+  
+  if [ "$?" -eq "0" ];then
+    echo "Starting installation"
+  else
+    exit 0 # Exit script
+  fi
+}
+
+gui_error() {
+  zenity --error  --text="Failed updating GalliumOs! $*" --icon-name="dialog-error"
+}
+
 echo_cmd()   { /bin/echo -e "${ANSI_CYA}${*}${ANSI_RST}"; }
 echo_err()   { /bin/echo -e "${ANSI_RED}${*}${ANSI_RST}"; }
 echo_title() { /bin/echo -e "\n${ANSI_HI}${ANSI_WHT}${*}${ANSI_RST}"; }
@@ -56,24 +99,51 @@ sudo_apt_get() {
   [ "$rc" -ne 0 ] && echo_err "\"$cmd\" returned an error. Proceed with caution."
 }
 
+apt_get_gui() {
+  RET=$(stdbuf -oL /bin/bash \-c '(sudo apt-get update \-y && sudo apt-get dist-upgrade \-y)' 2>&1 |
+        stdbuf -oL sed -n -e '/\[*$/ s/^/# /p' -e '/\*$/ s/^/# /p'|
+        zenity --progress --title="Updating" --text="Please wait..." --pulsate \
+        --width=620 --height=70 --auto-close --no-cancel --ok-label=".")  
+  echo "Return value: $RET"
+  if [ ! "$?" = 0 ] ; then
+    gui_error "Update cache failed (Check internet connection)"
+    exit 1
+  fi
+}
+
 hold() {
   echo_title "Press [enter] to close window: ${ANSI_RST}\c"
   read cr
 }
 
+gui_hold() {
+  zenity --info --title="Finished" --text="Update completed successfully" \
+    --icon-name="stock_check-filled" --ok-label="Finish"
+}
+
 ##
+gui() {
+  gui_banner
+  apt_get_gui
+  [ "$HOLD" ] && gui_hold 
+  exit 0
+}
 
 [ "$BANNER" ] && echo_banner
 
 if [ "$(id -u)" -eq 0 -o "$(groups | grep -w sudo)" ]; then
+  [ "$GUIMODE" ] && gui
   echo_title "Updating package directories..."
   sudo_apt_get -qq update
 
   echo_title "Updating packages..."
   sudo_apt_get dist-upgrade
 else
+  if [ "$GUIMODE" -eq 1 ]; then
+    gui_error "No root permissions!"
+    exit 0
+  fi
   echo_err "\n$(basename $0): fatal: must be root or in \"sudo\" group."
 fi
 
 [ "$HOLD" ] && hold
-
