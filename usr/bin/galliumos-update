@@ -1,17 +1,28 @@
 #!/bin/sh
-
 #
-# galliumos-update
-# Created by the galliumos devs
-# Gui version by David Smerkous
-#
-# License: GPL(V3)
+# File: galliumos-update
+# Created by: GalliumOS developers
+# Graphical version by David Smerkous
+# License: LGPL
 # Date: 9/5/2016
 #
 
 VERSION="v1: \"pardon our text\""
 UPDATE_ICON="/usr/share/icons/gnome/256x256/status/software-update-available.png" 
+WINDOW_ICON="--window-icon=$UPDATE_ICON"
 SPLASH_HTML="/usr/share/gallium/splash.html"
+USAGE_PRINT="Usage: $0 [mode]"
+USAGE_BODY="
+general:
+  no arg  |    : Run GalliumOs update within current terminal
+  --help  | -h : Display this help menu
+  --popup | -p : Open a preset terminal and run update
+  --gui   | -g : Run the default graphical update
+  --banner| -b : Print banner (Terminal only)
+  --hold  | -q : Don't autoclose (Terminal only)
+
+Created by: The GalliumOS team
+"
 
 relaunch_in_popup() {
   xfce4-terminal \
@@ -22,41 +33,51 @@ relaunch_in_popup() {
 }
 
 relaunch_in_gui() {
-   if [[ $EUID -ne 0 ]]; then
-      echo "Debug Root detected"
+  # Check for root permissions
+  if [ $(id -u) -eq 0 ]; then
+      echo "Debug Root detected!" # No need to promt for password
    else
-    echo "$(gksudo --print-pass --sudo-mode --message "Enter password for update" \
-       "$(0)")" | sudo -S printf '' # Open up password prompt and renter as root
+      echo "Getting " 
+      PASS="$(gksudo --print-pass --sudo-mode --message "Enter password for update" \
+       "ls")"
+      [ -z "$PASS" ] && { echo "Password not entered!" ; exit 1 ; }
+      echo "$PASS" | sudo -S printf 'Root test...' # Open up password prompt and re-enter as root
   fi
-  FIRST_T=$(echo "$0" | cut -c 1-2) # Get first two characters
+  FIRST_T=$(echo "$0" | cut -c 1-2) # Get first two characters (See if it was ran locally)
   NAME="$0"
   if [ "$FIRST_T" = "./" ]; then
-     NAME=$(echo "$0" | cut -d "/" -f 2) # Fix locally ran
+     NAME=$(echo "$0" | cut -d "/" -f 2) # Fix local run with absolute path
   fi 
-  CUR_PATH=$(readlink -f "$NAME")
-  sudo $CUR_PATH --gui_format --hold
+  CUR_PATH=$(readlink -f "$NAME") # Capture name
+  sudo $CUR_PATH --gui_format --hold # Run the update as root
   exit 0
+}
+
+ANSI_RED='\x1b[31m' # Red init
+ANSI_CYA='\x1b[36m' # Cyan init
+ANSI_WHT='\x1b[37m' # Grey init
+ANSI_HI='\x1b[1m'
+ANSI_RST='\x1b[0m' # Default color usually EOF
+
+echo_usage() {
+  /bin/echo -e "${ANSI_WHT}$USAGE_PRINT${ANSI_RST}$USAGE_BODY" # The .deskopt should have the correct
+  # Format
 }
 
 while [ "$1" ]; do
   case "$1" in
-    '--popup')  relaunch_in_popup ;;
-    '--gui') relaunch_in_gui ;;
-    '--gui_format') GUIMODE=1 ;;
-    '--banner') BANNER=1 ;;
-    '--hold')   HOLD=1 ;;
-    *)          printf "$0: fatal: unknown arg \"$1\"\nAvaliable: --popup, --gui, --banner, --hold\n";
-                exit 1 ;;
-  esac
-  shift
+    '--popup'|'-p')      relaunch_in_popup ;; # Launch the terminal in a new window
+    '--gui'|'-g')        relaunch_in_gui ;; # Double check for root permissions
+    '--gui_format')	 GUIMODE=1 ;;  # After relaunch set GUIMODE flag
+    '--banner'|'-b')     BANNER=1 ;; # Print banner in terminal
+    '--help'|'-h')       echo_usage; exit 0;; # Print the usage (function above)
+    '--hold'|'-q')       HOLD=1 ;; # Terminal display enter to continue / GUI display success or not (default yes)
+    *)          /bin/echo -e "${ANSI_RED}$0: fatal: unknown arg \"$1\"${ANSI_RST}"; echo_usage; exit 1;;
+  esac  # Print error argument not found
+  shift # Move an arg to the right
 done
 
-ANSI_RED='\x1b[31m'
-ANSI_CYA='\x1b[36m'
-ANSI_WHT='\x1b[37m'
-ANSI_HI='\x1b[1m'
-ANSI_RST='\x1b[0m'
-
+# Print the banner in the terminal with (arg: --banner)
 echo_banner() {
   /bin/echo -e ${ANSI_CYA}${ANSI_HI}
   cat << 'EOBANNER'
@@ -69,19 +90,24 @@ EOBANNER
   /bin/echo -e "   ${ANSI_RST}${ANSI_WHT}${VERSION}${ANSI_RST}"
 }
 
+# Default enabled no (arg: --banner) affect
 gui_banner() {
   zenity --text-info --title="GalliumOS Update" --width=500 --height=350  --html \
-  --filename="$SPLASH_HTML" --ok-label="Update"
+  --filename="$SPLASH_HTML" $WINDOW_ICON --text="$VERSION" --ok-label="Update" # Show html splash page for installation
   
-  if [ "$?" -eq "0" ];then
+  if [ "$?" -eq "0" ];then # Check if update was pressed
     echo "Starting installation"
   else
-    exit 0 # Exit script
+    exit 0 # Exit script (User pressed cancel)
   fi
 }
 
 gui_error() {
-  zenity --error  --text="Failed updating GalliumOs! $*" --icon-name="dialog-error"
+  zenity --error $WINDOW_ICON --text="Failed updating GalliumOS! $*" --icon-name="dialog-error"
+  printf 'icon: error\ntooltip: Failed updating GalliumOS\nvisible: true\n' | zenity \
+      --notification \
+      --window-icon="dialog-error" \
+      --text="GalliumOs update error" --listen # zenity stdin parsing
 }
 
 echo_cmd()   { /bin/echo -e "${ANSI_CYA}${*}${ANSI_RST}"; }
@@ -99,16 +125,46 @@ sudo_apt_get() {
   [ "$rc" -ne 0 ] && echo_err "\"$cmd\" returned an error. Proceed with caution."
 }
 
+up_to_date() {
+  zenity --info $WINDOW_ICON --text="Your system is up to date!" --icon-name="stock_check-filled" 2>&1 > /dev/null
+  printf 'icon: stock_check-filled\ntooltip: System is up to date!\nvisible: true\n' \
+    | zenity  --notification  --listen 2>&1 > /dev/null # zenity stdin parsing
+
+}
+
 apt_get_gui() {
-  RET=$(stdbuf -oL /bin/bash \-c '(sudo apt-get update \-y && sudo apt-get dist-upgrade \-y)' 2>&1 |
-        stdbuf -oL sed -n -e '/\[*$/ s/^/# /p' -e '/\*$/ s/^/# /p'|
-        zenity --progress --title="Updating" --text="Please wait..." --pulsate \
-        --width=620 --height=70 --auto-close --no-cancel --ok-label=".")  
-  echo "Return value: $RET"
-  if [ ! "$?" = 0 ] ; then
-    gui_error "Update cache failed (Check internet connection)"
-    exit 1
-  fi
+  # Found parts of script online
+  [ "$(pidof synaptic)" ] && sudo killall -9 synaptic
+  [ "$(pgrep gdebi-gtk)" ] && sudo killall -9 gdebi-gtk # Kill already running dpkg locks
+  
+  stdbuf -oL /bin/bash \-c "(echo \"Please wait....\" && sudo apt-get update -y && 
+NAMES=\$( { apt-get --just-print upgrade 2>&1 ; apt-get --just-print dist-upgrade 2>&1 ; } | perl -ne 'if (/Inst\\s([\\w,\\-,\\d,\\.,~,:,\\+]+)\\s\\[([\\w,\\-,\\d,\\.,~,:,\\+]+)\\]\\s\\(([\\w,\\-,\\d,\\.,~,:,\\+]+)\\)?/i) {print \"Name: \$1 INSTALLED: \$2 AVAILABLE: \$3\\n\"}' | awk '{print NR,\":\t\"\$0}' | tee /tmp/updateslist) 
+if [ -z \"\$(cat /tmp/updateslist)\" ]; then
+echo \"
+System is up to date!\"
+rm /tmp/updateslist
+zenity --info $WINDOW_ICON --title=\"GalliumOS update\" --text=\"Your system is up to date!\" --icon-name=\"stock_check-filled\" & 2>&1 >/dev/null; echo \"Press [Cancel] to exit...\";
+  printf 'icon: stock_check-filled\ntooltip: System is up to date!\nvisible: true\n' \
+    | zenity  --notification  --listen & 2>&1 >/dev/null; exit 0; 
+fi; printf \"Found updates!\n\$NAMES\n\" && echo \"Press [Next] to continue...\")" 2>&1 \
+      | zenity --text-info $WINDOW_ICON --title="Updating cache" --width=620 --height=600 \
+      --auto-scroll --ok-label="Next" 2>&1
+
+   case $? in
+     0) echo "User continues...";;
+     1) echo "User canceled..."; exit 0;;
+     *) echo "Update failed!"; gui_error "Couldn't update cache (Check connection)";; 
+   esac 
+
+  stdbuf -oL /bin/bash \-c "{ echo \"Updating please wait... (Main packages)\" ; sudo apt-get upgrade \-y ; echo \"Updating please wait... (Distro packages)\" ;  sudo apt-get dist-upgrade \-y  ; echo \"
+Done updating press [Finish] to exit...\" ; } | tee \"/tmp/updatelog\"" 2>&1 \
+| zenity --text-info $WINDOW_ICON --title="Updating packages" --width=700 --height=700 --auto-scroll --ok-label="Finish"
+
+   case $? in
+     0) echo "User continues...";;
+     1) echo "User cancels...";;
+     *) echo "Update failed!:"; gui_error "Couldn't update packages (Check connection)";;
+   esac
 }
 
 hold() {
@@ -117,15 +173,17 @@ hold() {
 }
 
 gui_hold() {
-  zenity --info --title="Finished" --text="Update completed successfully" \
-    --icon-name="stock_check-filled" --ok-label="Finish"
+  zenity --info $WINDOW_ICON --text="Finished! Your system is now up to date, please reboot for changes!" \
+   --icon-name="stock_check-filled" 2>&1 > /dev/null
+  printf 'icon: stock_check-filled\ntooltip: System update is now complete!\nvisible: true\n' \
+    | zenity  --notification  --listen 2>&1 > /dev/null # zenity stdin parsing
 }
 
 ##
 gui() {
   gui_banner
   apt_get_gui
-  [ "$HOLD" ] && gui_hold 
+  [ "$HOLD" ] && gui_hold
   exit 0
 }
 
@@ -140,7 +198,7 @@ if [ "$(id -u)" -eq 0 -o "$(groups | grep -w sudo)" ]; then
   sudo_apt_get dist-upgrade
 else
   if [ "$GUIMODE" -eq 1 ]; then
-    gui_error "No root permissions!"
+    gui_error "No root permissions!" # This can only happen in a glitch or if --gui_format is used
     exit 0
   fi
   echo_err "\n$(basename $0): fatal: must be root or in \"sudo\" group."
