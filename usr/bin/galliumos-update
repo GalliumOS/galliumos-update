@@ -46,7 +46,7 @@ echo_err()   { /bin/echo -e "${ANSI_RED}${*}${ANSI_RST}"; }
 echo_title() { /bin/echo -e "\n${ANSI_HI}${ANSI_WHT}${*}${ANSI_RST}"; }
 
 sudo_apt_get() {
-  cmd="sudo apt-get $*"
+  cmd="sudo apt $*"
   echo_cmd $cmd
 
   /bin/echo -e "${ANSI_WHT}\c"
