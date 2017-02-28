@@ -2,5 +2,5 @@
 Type=Application
 Name=GalliumOS Update
 Exec=/usr/bin/galliumos-update --popup
-Icon=/usr/share/icons/gnome/256x256/status/software-update-available.png
+Icon=update-manager
 Categories=System
