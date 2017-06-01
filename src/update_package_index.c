@@ -3,7 +3,7 @@
 int main() {
   setuid(0);
   setgid(0);
-  execl("/usr/bin/apt-get", "apt-get", "-qq", "update", NULL);
-  //execl("/usr/bin/apt-get", "apt-get", "update", NULL);
+
+  execle("/usr/bin/apt-get", "apt-get", "-qq", "update", NULL, NULL);
   return 0;
 }

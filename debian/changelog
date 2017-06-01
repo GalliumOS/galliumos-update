@@ -1,3 +1,9 @@
+galliumos-update (2.0.4) xenon; urgency=medium
+
+  * Fix exec style in update_package_index
+
+ -- reynhout <reynhout@galliumos.org>  Thu, 01 Jun 2017 02:16:22 +0000
+
 galliumos-update (2.0.3) xenon; urgency=medium
 
   * Changed icon to update-manager
