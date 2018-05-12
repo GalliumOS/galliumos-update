@@ -1,7 +1,7 @@
 Source: galliumos-update
 Section: admin
 Priority: required
-Maintainer: reynhout <reynhout@galliumos.org>
+Maintainer: GalliumOS <galliumos@galliumos.org>
 Build-Depends: debhelper (>= 8.0.0)
 Standards-Version: 3.9.6
 
