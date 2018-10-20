@@ -53,7 +53,8 @@ sudo_apt_get() {
   eval "$cmd"
   rc=$?
   /bin/echo -e "${ANSI_RST}\c"
-  [ "$rc" -ne 0 ] && echo_err "\"$cmd\" returned an error. Proceed with caution."
+  [ "$rc" -ne 0 ] && echo_err "\"$cmd\" returned an error. Proceed with caution." && return $rc
+  return 0
 }
 
 hold() {
@@ -68,12 +69,15 @@ hold() {
 if [ "$(id -u)" -eq 0 -o "$(groups | grep -w sudo)" ]; then
   echo_title "Updating package directories..."
   sudo_apt_get -qq update
+  RET_VAL=$?
 
   echo_title "Updating packages..."
   sudo_apt_get dist-upgrade
+  RET_VAL=$(($RET_VAL+$?))
 else
   echo_err "\n$(basename $0): fatal: must be root or in \"sudo\" group."
 fi
 
 [ "$HOLD" ] && hold
 
+exit $RET_VAL
