@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=GalliumOS Update
-Exec=/usr/bin/galliumos-update --popup
-Icon=update-manager
+Exec=/usr/bin/galliumos_update.py
+Icon=system-software-update
 Categories=System

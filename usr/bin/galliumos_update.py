@@ -1,0 +1,153 @@
+#!/usr/bin/python3
+'''
+GalliumOS Update
+'''
+import argparse
+import logging
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+import aptdaemon.client
+from aptdaemon.errors import TransactionFailed, NotAuthorizedError
+from aptdaemon.enums import ERROR_UNKNOWN
+from aptdaemon.gtk3widgets import AptConfirmDialog, \
+                                  AptProgressDialog, \
+                                  AptErrorDialog
+
+VERSION = 2
+VERSIONTITLE = 'pardon our gui'
+with open('/etc/os-release') as f:
+    for line in f:
+        k, v = line.rstrip().split('=', maxsplit=1)
+        if k == 'NAME': OSNAME = v.strip('"')
+        elif k == 'VERSION': OSVERSION = v.strip('"')
+ICON = 'system-software-update'
+BANNER = '\x1b[36m\x1b[1m' \
+"""   ___      _ _ _            ___  ___   _   _          _      _       
+  / __|__ _| | (_)_  _ _ __ / _ \/ __| | | | |_ __  __| |__ _| |_ ___ 
+ | (_ / _` | | | | || | '  \ (_) \__ \ | |_| | '_ \/ _` / _` |  _/ -_)
+  \___\__,_|_|_|_|\_,_|_|_|_\___/|___/  \___/| .__/\__,_\__,_|_| \___|
+                                             |_|                      """ \
+'\x1b[0m\n   v{}: "{}"'.format(VERSION, VERSIONTITLE)
+
+class UpdateWindow(Gtk.Window):
+    '''
+    GTK window for updating
+    '''
+    def __init__(self):
+        Gtk.Window.__init__(self, title='GalliumOS Update v{}'.format(VERSION),
+                            border_width=10,
+                            resizable=False) # Window setup
+        self.set_default_size(280, 180)
+        self.set_default_icon(Gtk.IconTheme.get_default().load_icon(ICON, 32, 0))
+        self.hb = Gtk.HeaderBar() # Headerbar
+        self.hb.set_show_close_button(True)
+        self.hb.props.title = 'GalliumOS Update'
+        self.hb.props.subtitle = 'v{}: "{}"'.format(VERSION, VERSIONTITLE)
+        self.set_titlebar(self.hb)
+        self.button_popover = Gtk.Button() # Popover button
+        self.button_popover.add(Gtk.Image.new_from_icon_name(ICON, 5))
+        self.hb.pack_start(self.button_popover)
+        self.button_popover.connect("clicked", self.on_popover_clicked)
+        self.popover = Gtk.Popover() # Popover
+        self.postff = Gtk.Box(orientation=Gtk.Orientation.VERTICAL) # Popover content
+        self.postff.pack_start(Gtk.LinkButton.new_with_label('https://github.com/'
+                                                             'GalliumOS/galliumos-update',
+                                                             '{} {}'.format(OSNAME, OSVERSION)),
+                               False, True, 10)
+        self.popover.add(self.postff)
+        self.popover.set_position(Gtk.PositionType.BOTTOM)
+        self.button_update = Gtk.Button.new_with_mnemonic('_Update Package Lists') # Buttons
+        self.button_upgrade = Gtk.Button.new_with_mnemonic('Upgrade _Packages')
+        self.button_update.connect('clicked', self.on_update_clicked)
+        self.button_upgrade.connect('clicked', self.on_upgrade_clicked)
+        self.vbox = Gtk.VBox(spacing=10)
+        self.vbox.add(self.button_update)
+        self.vbox.add(self.button_upgrade)
+        self.add(self.vbox)
+        self.ac = aptdaemon.client.AptClient() # Aptdaemon client
+        logging.debug('Initialisation complete...')
+
+    def on_update_clicked(self, widget):
+        '''
+        Runs on "Update package directories" clicked
+        '''
+        logging.debug('Update Package Lists started...')
+        self.ac.update_cache(reply_handler=self._run_transaction,
+                             error_handler=self._on_error)
+
+    def on_upgrade_clicked(self, widget):
+        '''
+        Runs on "Full upgrade" clicked
+        '''
+        logging.debug('Upgrade Packages started...')
+        self.ac.upgrade_system(safe_mode=False,
+                               reply_handler=self._simulate_trans,
+                               error_handler=self._on_error)
+
+    def on_popover_clicked(self, widget):
+        '''
+        Opens dropdown popover
+        '''
+        self.popover.set_relative_to(self.button_popover)
+        self.popover.show_all()
+        logging.debug('Popover displaying...')
+        self.popover.popup()
+
+    def _run_transaction(self, transaction):
+        logging.debug('Progress dialog displaying...')
+        dialog = AptProgressDialog(transaction, parent=self)
+        dialog.run(close_on_finished=True, show_error=True,
+                   reply_handler=lambda: True,
+                   error_handler=self._on_error)
+        logging.debug('Transaction complete...')
+
+    def _simulate_trans(self, trans):
+        trans.simulate(reply_handler=lambda: self._confirm_deps(trans),
+                       error_handler=self._on_error)
+
+    def _confirm_deps(self, trans):
+        if [pkgs for pkgs in trans.dependencies if pkgs]:
+            logging.debug('Confirmation dialog displaying...')
+            dialog = AptConfirmDialog(trans, parent=self)
+            res = dialog.run()
+            dialog.hide()
+            if res != Gtk.ResponseType.OK:
+                logging.debug('res: %s', res)
+                return
+        logging.debug('Dependencies confirmed...')
+        self._run_transaction(trans)
+
+    def _on_error(self, error):
+        if isinstance(error, NotAuthorizedError):
+            logging.debug('error: %s', error)
+            return
+        if not isinstance(error, TransactionFailed):
+            logging.debug('error: %s', error)
+            error = TransactionFailed(ERROR_UNKNOWN, str(error))
+        logging.debug('Error dialog displaying...')
+        dialog = AptErrorDialog(error)
+        dialog.run()
+        dialog.hide()
+        logging.debug('Error dialog closed...')
+
+if __name__ == '__main__':
+    PARSER = argparse.ArgumentParser(description=BANNER,
+                                     epilog='{} {}'.format(OSNAME, OSVERSION),
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    PARSER.add_argument('-v', '--version',
+                        action='version',
+                        version='GalliumOS Update v{}'.format(VERSION),
+                        help='output version number')
+    PARSER.add_argument('-d', '--debug',
+                        action='store_true',
+                        help='enable debug info')
+    ARGS = PARSER.parse_args()
+    if ARGS.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logging.debug('Debugging enabled...')
+    WIN = UpdateWindow()
+    WIN.connect('destroy', Gtk.main_quit)
+    logging.debug('Starting...')
+    WIN.show_all()
+    Gtk.main()
