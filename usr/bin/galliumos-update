@@ -45,7 +45,7 @@ echo_cmd()   { /bin/echo -e "${ANSI_CYA}${*}${ANSI_RST}"; }
 echo_err()   { /bin/echo -e "${ANSI_RED}${*}${ANSI_RST}"; }
 echo_title() { /bin/echo -e "\n${ANSI_HI}${ANSI_WHT}${*}${ANSI_RST}"; }
 
-sudo_apt_get() {
+sudo_apt() {
   cmd="sudo apt $*"
   echo_cmd $cmd
 
@@ -67,10 +67,10 @@ hold() {
 
 if [ "$(id -u)" -eq 0 -o "$(groups | grep -w sudo)" ]; then
   echo_title "Updating package directories..."
-  sudo_apt_get -qq update
+  sudo_apt -qq update
 
   echo_title "Updating packages..."
-  sudo_apt_get dist-upgrade
+  sudo_apt full-upgrade
 else
   echo_err "\n$(basename $0): fatal: must be root or in \"sudo\" group."
 fi
