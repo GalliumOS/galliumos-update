@@ -1,3 +1,10 @@
+galliumos-update (2.9902) bismuth; urgency=medium
+
+  * Update apt commands
+  * Exit with non-zero return code on error
+
+ -- reynhout <reynhout@galliumos.org>  Sun, 10 Mar 2019 20:17:40 +0000
+
 galliumos-update (2.9901) bismuth; urgency=medium
 
   * Prepare for GalliumOS 3.0
