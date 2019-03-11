@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# galliumos-update
+#
+
+VERSION="v1: \"pardon our text\""
+
+relaunch_in_popup() {
+  xfce4-terminal \
+    --title="GalliumOS Update" --geometry=120x24+100+0 \
+    --icon=/usr/share/icons/gnome/256x256/status/software-update-available.png \
+    --execute $0 --banner --hold
+  exit 0
+}
+
+while [ "$1" ]; do
+  case "$1" in
+    '--popup')  relaunch_in_popup ;;
+    '--banner') BANNER=1 ;;
+    '--hold')   HOLD=1 ;;
+    *)          echo "$0: fatal: unknown arg \"$1\""; exit 1 ;;
+  esac
+  shift
+done
+
+ANSI_RED='\x1b[31m'
+ANSI_CYA='\x1b[36m'
+ANSI_WHT='\x1b[37m'
+ANSI_HI='\x1b[1m'
+ANSI_RST='\x1b[0m'
+
+echo_banner() {
+  /bin/echo -e ${ANSI_CYA}${ANSI_HI}
+  cat << 'EOBANNER'
+   ___      _ _ _            ___  ___   _   _          _      _       
+  / __|__ _| | (_)_  _ _ __ / _ \/ __| | | | |_ __  __| |__ _| |_ ___ 
+ | (_ / _` | | | | || | '  \ (_) \__ \ | |_| | '_ \/ _` / _` |  _/ -_)
+  \___\__,_|_|_|_|\_,_|_|_|_\___/|___/  \___/| .__/\__,_\__,_|_| \___|
+                                             |_|                      
+EOBANNER
+  /bin/echo -e "   ${ANSI_RST}${ANSI_WHT}${VERSION}${ANSI_RST}"
+}
+
+echo_cmd()   { /bin/echo -e "${ANSI_CYA}${*}${ANSI_RST}"; }
+echo_err()   { /bin/echo -e "${ANSI_RED}${*}${ANSI_RST}"; }
+echo_title() { /bin/echo -e "\n${ANSI_HI}${ANSI_WHT}${*}${ANSI_RST}"; }
+
+sudo_apt() {
+  cmd="sudo apt $*"
+  echo_cmd $cmd
+
+  /bin/echo -e "${ANSI_WHT}\c"
+  eval "$cmd"
+  rc=$?
+  /bin/echo -e "${ANSI_RST}\c"
+  [ "$rc" -ne 0 ] && echo_err "\"$cmd\" returned an error. Proceed with caution." && return $rc
+  return 0
+}
+
+hold() {
+  echo_title "Press [enter] to close window: ${ANSI_RST}\c"
+  read cr
+}
+
+##
+
+[ "$BANNER" ] && echo_banner
+
+if [ "$(id -u)" -eq 0 -o "$(groups | grep -w sudo)" ]; then
+  echo_title "Updating package directories..."
+  sudo_apt -qq update
+  RET_VAL=$?
+
+  echo_title "Updating packages..."
+  sudo_apt full-upgrade
+  RET_VAL=$(($RET_VAL+$?))
+else
+  echo_err "\n$(basename $0): fatal: must be root or in \"sudo\" group."
+fi
+
+[ "$HOLD" ] && hold
+
+exit $RET_VAL
