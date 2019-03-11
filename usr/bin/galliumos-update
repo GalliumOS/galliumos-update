@@ -2,6 +2,7 @@
 '''
 GalliumOS Update
 '''
+from os import geteuid
 import argparse
 import logging
 import gi
@@ -14,7 +15,8 @@ from aptdaemon.enums import ERROR_UNKNOWN
 from aptdaemon.gtk3widgets import AptConfirmDialog, \
                                   AptProgressDialog, \
                                   AptErrorDialog
-
+if geteuid() != 0:
+    exit("You need to run this script with pkexec or sudo! Exiting...")
 VERSION = 2
 VERSIONTITLE = 'pardon our gui'
 with open('/etc/os-release') as f:
