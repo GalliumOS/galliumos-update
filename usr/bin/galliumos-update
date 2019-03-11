@@ -15,8 +15,7 @@ from aptdaemon.enums import ERROR_UNKNOWN
 from aptdaemon.gtk3widgets import AptConfirmDialog, \
                                   AptProgressDialog, \
                                   AptErrorDialog
-if geteuid() != 0:
-    exit("You need to run this script with pkexec or sudo! Exiting...")
+
 VERSION = 2
 VERSIONTITLE = 'pardon our gui'
 with open('/etc/os-release') as f:
@@ -147,6 +146,8 @@ if __name__ == '__main__':
     if ARGS.debug:
         logging.basicConfig(level=logging.DEBUG)
         logging.debug('Debugging enabled...')
+    if geteuid() != 0:
+        exit("You need to run this script with pkexec or sudo! Exiting...")
     WIN = UpdateWindow()
     WIN.connect('destroy', Gtk.main_quit)
     logging.debug('Starting...')
