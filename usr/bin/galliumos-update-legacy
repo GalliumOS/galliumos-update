@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# galliumos-update
+# galliumos-update-legacy
 #
 
 VERSION="v1: \"pardon our text\""
@@ -8,7 +8,7 @@ VERSION="v1: \"pardon our text\""
 relaunch_in_popup() {
   xfce4-terminal \
     --title="GalliumOS Update" --geometry=120x24+100+0 \
-    --icon=/usr/share/icons/gnome/256x256/status/software-update-available.png \
+    --icon=/usr/share/icons/Numix-Circle/48/apps/system-software-update.svg \
     --execute $0 --banner --hold
   exit 0
 }
