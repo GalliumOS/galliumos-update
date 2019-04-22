@@ -57,10 +57,13 @@ class UpdateWindow(Gtk.Window):
                                False, True, 10)
         self.popover.add(self.postff)
         self.popover.set_position(Gtk.PositionType.BOTTOM)
-        self.button_update = Gtk.Button.new_with_mnemonic('_Update and Upgrade') # Buttons
+        self.button_update = Gtk.Button.new_with_mnemonic('_Update') # Buttons
         self.button_update.connect('clicked', self.on_update_clicked)
+        self.button_quit = Gtk.Button.new_with_mnemonic('_Quit') # Buttons
+        self.button_quit.connect('clicked', Gtk.main_quit)
         self.vbox = Gtk.VBox(spacing=10)
         self.vbox.add(self.button_update)
+        self.vbox.add(self.button_quit)
         self.add(self.vbox)
         self.ac = aptdaemon.client.AptClient() # Aptdaemon client
         logging.debug('Initialisation complete...')
