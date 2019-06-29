@@ -1,4 +1,4 @@
-galliumos-update (2.9902) bismuth; urgency=medium
+galliumos-update (3.0) bismuth; urgency=medium
 
   * Update apt commands
   * Exit with non-zero return code on error
